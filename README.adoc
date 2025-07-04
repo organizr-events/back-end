@@ -1,0 +1,14 @@
+= BACK-END for organizr.events
+
+== Description
+
+This is the back-end for the organizr.events project, which is a web application designed to help users manage and organize events. The back-end is built using SurrealDB, a serverless database, and is designed to be lightweight and efficient.
+
+== Features
+
+Not much right now, but the plan is to have:
+* User authentication and authorization
+* Event creation and management
+* Event registration and attendance tracking
+* Notifications and reminders for upcoming events
+* Integration with external calendars and services
