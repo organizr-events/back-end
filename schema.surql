@@ -24,6 +24,7 @@ DEFINE TABLE event TYPE NORMAL SCHEMAFULL PERMISSIONS NONE;
 DEFINE FIELD end ON event TYPE datetime DEFAULT time::now() + 1d ASSERT $value >= start PERMISSIONS FULL;
 DEFINE FIELD name ON event TYPE string DEFAULT 'Event' ASSERT string::len($value) > 0 PERMISSIONS FULL;
 DEFINE FIELD start ON event TYPE datetime DEFAULT time::now() ASSERT $value <= end PERMISSIONS FULL;
+DEFINE FIELD wallet ON event TYPE record<wallet> DEFAULT (CREATE wallet)[0].id PERMISSIONS FULL;
 
 
 
@@ -39,5 +40,14 @@ DEFINE FIELD username ON user TYPE string ASSERT string::len($value) > 0 PERMISS
 
 DEFINE INDEX email ON user FIELDS email UNIQUE;
 DEFINE INDEX username ON user FIELDS username UNIQUE;
+
+
+-- ------------------------------
+-- TABLE: wallet
+-- ------------------------------
+
+DEFINE TABLE wallet TYPE NORMAL SCHEMAFULL PERMISSIONS NONE;
+
+
 
 
