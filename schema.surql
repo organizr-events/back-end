@@ -21,7 +21,7 @@ DEFINE FIELD out ON attends TYPE record<event> PERMISSIONS FULL;
 
 DEFINE TABLE event TYPE NORMAL SCHEMAFULL PERMISSIONS NONE;
 
-DEFINE FIELD end ON event TYPE datetime DEFAULT time::now() ASSERT $value >= start PERMISSIONS FULL;
+DEFINE FIELD end ON event TYPE datetime DEFAULT time::now() + 1d ASSERT $value >= start PERMISSIONS FULL;
 DEFINE FIELD name ON event TYPE string DEFAULT 'Event' ASSERT string::len($value) > 0 PERMISSIONS FULL;
 DEFINE FIELD start ON event TYPE datetime DEFAULT time::now() ASSERT $value <= end PERMISSIONS FULL;
 
