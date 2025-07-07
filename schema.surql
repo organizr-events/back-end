@@ -8,7 +8,7 @@ OPTION IMPORT;
 -- ACCESSES
 -- ------------------------------
 
-DEFINE ACCESS user ON DATABASE TYPE RECORD SIGNUP (CREATE user SET username = $username, email = $email, password = crypto::argon2::generate($password)) SIGNIN (SELECT * FROM user WHERE username = $username AND crypto::argon2::compare(password, $password)) DURATION FOR TOKEN 1h, FOR SESSION NONE;
+DEFINE ACCESS user ON DATABASE TYPE RECORD SIGNUP (CREATE user SET username = $username, email = $email, password = $password) SIGNIN (SELECT * FROM user WHERE username = $username AND crypto::argon2::compare(password, $password)) DURATION FOR TOKEN 1h, FOR SESSION NONE;
 
 -- ------------------------------
 -- TABLE: attends
@@ -38,11 +38,11 @@ DEFINE FIELD wallet ON event TYPE record<wallet> DEFAULT (CREATE wallet)[0].id P
 -- TABLE: user
 -- ------------------------------
 
-DEFINE TABLE user TYPE NORMAL SCHEMAFULL PERMISSIONS NONE;
+DEFINE TABLE user TYPE NORMAL SCHEMAFULL PERMISSIONS FOR select, create FULL, FOR update, delete WHERE id = $auth.id;
 
-DEFINE FIELD email ON user TYPE string ASSERT string::is::email($value) PERMISSIONS FULL;
-DEFINE FIELD password ON user TYPE string PERMISSIONS FULL;
-DEFINE FIELD username ON user TYPE string ASSERT string::len($value) > 0 PERMISSIONS FULL;
+DEFINE FIELD email ON user TYPE string ASSERT string::is::email($value) PERMISSIONS FOR select, update WHERE user = $auth.id, FOR create FULL;
+DEFINE FIELD password ON user TYPE string VALUE crypto::argon2::generate($value) PERMISSIONS FOR select, create NONE, FOR update WHERE user = $auth.id;
+DEFINE FIELD username ON user TYPE string ASSERT string::len($value) > 0 PERMISSIONS FOR select, create FULL, FOR update WHERE user = $auth.id;
 
 DEFINE INDEX email ON user FIELDS email UNIQUE;
 DEFINE INDEX username ON user FIELDS username UNIQUE;
