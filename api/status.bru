@@ -1,0 +1,21 @@
+meta {
+  name: status
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/status
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.statusText: eq OK
+  res.headers.server: eq SurrealDB
+}
+
+docs {
+  This HTTP RESTful endpoint checks whether the database web server is running, returning a 200 status code.
+}

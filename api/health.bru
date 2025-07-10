@@ -1,0 +1,22 @@
+meta {
+  name: health
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/health
+  body: none
+  auth: inherit
+}
+
+assert {
+  res.status: eq 200
+  res.statusText: eq OK
+}
+
+docs {
+  This HTTP RESTful endpoint checks whether the database server and storage engine are running.
+  
+  The endpoint returns a 200 status code on success and a 500 status code on failure.
+}
