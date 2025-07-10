@@ -38,7 +38,7 @@ DEFINE FIELD wallet ON event TYPE record<wallet> DEFAULT (CREATE wallet)[0].id P
 -- TABLE: user
 -- ------------------------------
 
-DEFINE TABLE user TYPE NORMAL SCHEMAFULL PERMISSIONS FOR select, create FULL, FOR update, delete WHERE id = $auth.id;
+DEFINE TABLE user TYPE NORMAL SCHEMAFULL PERMISSIONS FOR select FULL, FOR create NONE, FOR update, delete WHERE id = $auth.id;
 
 DEFINE FIELD email ON user TYPE string ASSERT string::is::email($value) PERMISSIONS FOR select, update WHERE user = $auth.id, FOR create FULL;
 DEFINE FIELD password ON user TYPE string VALUE crypto::argon2::generate($value) PERMISSIONS FOR select, create NONE, FOR update WHERE user = $auth.id;
