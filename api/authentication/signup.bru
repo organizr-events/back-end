@@ -1,0 +1,46 @@
+meta {
+  name: signup
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/signup
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "ns": "{{namespace}}",
+    "db": "{{database}}",
+    "ac": "{{access}}",
+    "username": "{{username}}",
+    "password": "{{password}}",
+    "email": "{{email}}"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.statusText: eq OK
+  res.body.code: eq 200
+  res.body.details: eq Authentication succeeded
+  res.body.token: isNotEmpty
+}
+
+script:pre-request {
+  const nanoid = require("nanoid")
+  
+  const body = req.getBody()
+  
+  const generated_username = nanoid.nanoid()
+  body.username = generated_username
+  body.email = `${generated_username}@test.com`
+  
+  req.setBody(body)
+}
+
+docs {
+  This HTTP RESTful endpoint is used to create an account inside the SurrealDB database server.
+}

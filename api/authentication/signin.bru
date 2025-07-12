@@ -1,0 +1,34 @@
+meta {
+  name: signin
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/signin
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "ns": "{{namespace}}",
+    "db": "{{database}}",
+    "ac": "{{access}}",
+    "username": "{{username}}",
+    "password": "{{password}}",
+    "email": "{{email}}"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.statusText: eq OK
+  res.body.code: eq 200
+  res.body.details: eq Authentication succeeded
+  res.body.token: isNotEmpty
+}
+
+docs {
+  This HTTP RESTful endpoint is used to access an existing account inside the SurrealDB database server.
+}
