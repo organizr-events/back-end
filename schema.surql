@@ -30,7 +30,18 @@ DEFINE TABLE event TYPE NORMAL SCHEMAFULL PERMISSIONS NONE;
 DEFINE FIELD end ON event TYPE datetime DEFAULT time::now() + 1d ASSERT $value >= start PERMISSIONS FULL;
 DEFINE FIELD name ON event TYPE string DEFAULT 'Event' ASSERT string::len($value) > 0 PERMISSIONS FULL;
 DEFINE FIELD start ON event TYPE datetime DEFAULT time::now() ASSERT $value <= end PERMISSIONS FULL;
-DEFINE FIELD wallet ON event TYPE record<wallet> DEFAULT (CREATE wallet)[0].id PERMISSIONS FULL;
+
+
+
+-- ------------------------------
+-- TABLE: transaction
+-- ------------------------------
+
+DEFINE TABLE transaction TYPE NORMAL SCHEMAFULL PERMISSIONS NONE;
+
+DEFINE FIELD amount ON transaction TYPE number ASSERT $value > 0 PERMISSIONS FULL;
+DEFINE FIELD paid_by ON transaction TYPE record<user> PERMISSIONS FULL;
+DEFINE FIELD wallet ON transaction TYPE record<wallet> PERMISSIONS FULL;
 
 
 
@@ -48,11 +59,15 @@ DEFINE INDEX email ON user FIELDS email UNIQUE;
 DEFINE INDEX username ON user FIELDS username UNIQUE;
 
 
+
 -- ------------------------------
 -- TABLE: wallet
 -- ------------------------------
 
 DEFINE TABLE wallet TYPE NORMAL SCHEMAFULL PERMISSIONS NONE;
+
+DEFINE FIELD `for` ON wallet TYPE record<event> PERMISSIONS FULL;
+DEFINE FIELD name ON wallet TYPE string ASSERT string::len($value) > 0 PERMISSIONS FULL;
 
 
 
