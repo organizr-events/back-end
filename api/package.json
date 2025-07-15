@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "test": "bru run"
+  },
+  "dependencies": {
+    "@usebruno/cli": "^2.7.0"
+  }
+}
