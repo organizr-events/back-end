@@ -1,6 +1,10 @@
 {
   "scripts": {
-    "test": "bru run"
+    "docker-container": "docker build -t be ../. && docker run -d --name test --rm -p 8000:8000 be",
+    "docker-env":"docker exec -it test /surreal import -e http://localhost:8000 -u root -p root --ns test --db test -l none ./schema.surql || exit 0",
+    "docker-remove": "docker rm -f test",
+    "docker-stop": "docker stop test",
+    "test": "npm run docker-container && npm run docker-env && bru run --env-file ./environments/example.bru && npm run docker-stop && npm run docker-remove"
   },
   "dependencies": {
     "@usebruno/cli": "^2.7.0"
