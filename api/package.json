@@ -2,9 +2,10 @@
   "scripts": {
     "docker-container": "docker build -t be ../. && docker run -d --name test --rm -p 8000:8000 be",
     "docker-env":"docker exec -it test /surreal import -e http://localhost:8000 -u root -p root --ns test --db test -l none ./schema.surql || exit 0",
+    "create-test-user": "\"CREATE user SET username = 'test', email = 'test@test.com', password = 'test'\" | docker exec -it test /surreal sql -e http://localhost:8000 -u root -p root --ns test --db test",
     "docker-remove": "docker rm -f test",
     "docker-stop": "docker stop test",
-    "test": "npm run docker-container && npm run docker-env && bru run --env-file ./environments/example.bru && npm run docker-stop && npm run docker-remove"
+    "test": "npm run docker-container && npm run docker-env && npm run create-test-user && bru run --env-file ./environments/example.bru && npm run docker-stop && npm run docker-remove"
   },
   "dependencies": {
     "@usebruno/cli": "^2.7.0"
